@@ -4,6 +4,9 @@ Created on Tue May 07 11:08 2019
 
 @author: agoldschmidt
 
+TODO: I know that I won't always be able to store the distances in memory.
+    I'll need to build in some adjustments for that. Should be that I refactor
+    so that all functions that want distances call lookups. That's a major refactor.
 
 The key idea of the implementation is that combinatorics outputs start with 0 and
     run over the entire range of other indices. The distance matrix will lose 2
@@ -22,7 +25,7 @@ import itertools as it
 # --- Utilites ------------------------------------------------------
 # -------------------------------------------------------------------
 
-def construct_distance_matrix(X):
+def construct_distance_matrix(X, distance_fn):
     '''
     Construct a distance matrix D={i,j, d(x_i,x_j): for all x_i, x_j in X}. 
         The matrix is symmetric so we just compute distances for all combinations 
@@ -31,8 +34,9 @@ def construct_distance_matrix(X):
     
     Arguments:
         X: A list of elements from which to construct the distance matrix
+        distance_fn: Takes a pair of rows of X and returns a real value
     '''
-    return [[i,j,np.sum(np.square(X[i]-X[j]))] for i,j in it.combinations(range(len(X)),2)]
+    return [[i,j,distance_fn(X[i], X[j])] for i,j in it.combinations(range(len(X)),2)]
 
 def lookup_distance(i, j, distance_matrix, n_elems, equal_distance = 0):
     '''
@@ -124,14 +128,16 @@ def update_chain(chain, rnn_pair):
 # -------------------------------------------------------------------
 
 
-def protoclust(X):
+def protoclust(X, distance_fn):
     n,d = X.shape
 
     # Start with C_0 = {{x_1},{x_2},...,{x_n}} and d({x_i},{x_j})=d(x_i,x_j)
     clustering = [[[i] for i in range(n)]] # List of clustering for each iteration
     clustering_centers =  [[[i] for i in range(n)]]
     clustering_distances = [[0 for i in range(n)]]
-    distance = construct_distance_matrix(X)
+
+    # TODO: Pre-allocation should be an option, not the rule.
+    distance = construct_distance_matrix(X, distance_fn)
     original_distances = distance
 
 
