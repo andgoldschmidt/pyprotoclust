@@ -76,11 +76,11 @@ def minimax_distance(G, H, distance):
     G_union_H = G + H # list of original indices
     best_center = -1
     best_center_r = np.inf
-    for center in G_union_H:
-        center_max_r = max([distance(center, j) for j in G_union_H if j != center])
+    for possible_center in G_union_H:
+        center_max_r = max([distance(possible_center, j) for j in G_union_H])
         if center_max_r < best_center_r:
             best_center_r = center_max_r
-            best_center = center
+            best_center = possible_center
     return [best_center_r, best_center]
 
 # -------------------------------------------------------------------
@@ -94,7 +94,7 @@ def protoclust(X, distance_fn, verbose=False):
 
     n,d = X.shape
     # Class helps to compute distance_fn a minimal number of times
-    # (later, break this out so distance_fn is an argument)
+    # (later, break this out so distance matrix is an argument)
     dm = distance_matrix(X, distance_fn)
 
     if verbose:
@@ -170,4 +170,4 @@ def protoclust(X, distance_fn, verbose=False):
         # Update the available indices by removing the merged indices and adding the new index
         available_indices.append([a for a in available_indices[iteration] if a not in RNN_pair] + [n + iteration])
 
-    return available_indices, [clustering, clustering_centers, clustering_distances], Z
+    return Z, [clustering, clustering_centers, clustering_distances]
