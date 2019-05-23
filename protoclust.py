@@ -33,8 +33,36 @@ class distance_matrix:
         '''
         self.distance_fn = distance_fn
         self.n_elems = len(X)
+        self.shape = (self.n_elems, self.n_elems)
         self._distance_matrix = [[i,j,self.distance_fn(X[i], X[j])] for i,j in it.combinations(range(self.n_elems),2)]
 
+    def __len__(self):
+        return self.n_elems
+
+    # def __getitem__(self, key):
+    #     # Part I: Single items
+    #     if isinstance(key, slice):
+    #         # Get the start, stop, and step from the slice
+    #         return [self[i] for i in xrange(*key.indices(len(self)))]
+    #     elif isinstance(key, int):
+    #         # Handle negative indices
+    #         if key < 0: 
+    #             key += len(self)
+    #         if key < 0 or key >= len(self):
+    #             raise(IndexError, "The index {} is out of range.".format(key))
+    #         # Get the row
+    #         return [self.lookup_distance(key,i) for i in range(self.n_elems)]
+    #     # Part II: 2-Tuples
+    #     isinstance(key, tuple) and len(key) == 2:
+    #         k1, k2 = *key
+    #         return self.lookup_distance(k1,k2)
+    #     else:
+    #         raise(TypeError, "Invalid argument type.")
+
+    # def __getitem__(self, key):
+    #     if isinstance(key, int):
+            
+    #     elif isinstance(key, slice):
 
     def lookup_distance(self, i, j, equal_distance = 0):
         '''
@@ -56,6 +84,7 @@ class distance_matrix:
         else:
             return self.lookup_distance(j, i, equal_distance)
 
+# -------------------------------------------------------------------
 
 def find_nearest_neighbor(index, distance_matrix, possible_neighbors):
     '''
@@ -63,6 +92,7 @@ def find_nearest_neighbor(index, distance_matrix, possible_neighbors):
         of possible_neighbors using distance.
     '''
     return min([[j, distance_matrix[index, j]] for j in possible_neighbors if j != index], key=lambda x: x[1])[0]
+
 
 def minimax_distance(G, H, distance):
     '''
@@ -87,25 +117,32 @@ def minimax_distance(G, H, distance):
 # --- Main algorithm ------------------------------------------------
 # -------------------------------------------------------------------
 
-
-def protoclust(X, distance_fn, verbose=False):
+def compute_distance_matrix(X, distance_fn, verbose=False):
+    '''
+    '''
     if verbose:
         print('Compute distance matrix...')
 
-    n,d = X.shape
     # Class helps to compute distance_fn a minimal number of times
-    # (later, break this out so distance matrix is an argument)
     dm = distance_matrix(X, distance_fn)
 
     if verbose:
         print('\tDone.')
+
+    return dm
+
+
+def protoclust(distance_matrix, verbose=False):
+    '''
+    '''
+    n,_ = dm.shape
 
     # TODO: worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
     # Need a big matrix of size (2n-1)^2, prefilled n x n; Extra rows are added at each iteration
     big_matrix = np.inf*np.ones((2*n - 1, 2*n - 1))
     for i in range(n):
         for j in range(n):
-            big_matrix[i,j] = dm.lookup_distance(i,j)
+            big_matrix[i,j] = distance_matrix[i,j]
 
     # Stores the linkage matrix for scipy
     Z = []
@@ -146,7 +183,7 @@ def protoclust(X, distance_fn, verbose=False):
         RNN_pair = [chain[-2], chain[-1]]
 
         # Compute the minimax distances for the new G1 + G2 using all underlying points
-        G1G2_distance, G1G2_center = minimax_distance(G1, G2, dm.lookup_distance)
+        G1G2_distance, G1G2_center = minimax_distance(G1, G2, distance_matrix)
         
         # Add the new cluster to the record
         clustering.append(G1 + G2)
@@ -154,7 +191,7 @@ def protoclust(X, distance_fn, verbose=False):
         clustering_distances.append(G1G2_distance)
 
         # Compute the new cluster distances for all available indices
-        new_distance = [minimax_distance(G1+G2, clustering[a], dm.lookup_distance)[0] if a not in RNN_pair else 0
+        new_distance = [minimax_distance(G1+G2, clustering[a], distance_matrix)[0] if a not in RNN_pair else 0
                         for a in available_indices[iteration]]
 
         # Fill the n+iteration row/column of the big matrix at all available indices
