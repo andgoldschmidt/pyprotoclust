@@ -18,7 +18,6 @@ class distance_matrix:
         Construct a distance matrix D={i,j, d(x_i,x_j): for all x_i, x_j in X}. 
             The matrix is symmetric so we just compute distances for all combinations 
             of len(X) choose 2. Use the lookup function 'lookup_distance' to get distances.
-            Currently, Euclidean distance is the fixed behavior.
         
         Arguments:
             X: A list of elements from which to construct the distance matrix
