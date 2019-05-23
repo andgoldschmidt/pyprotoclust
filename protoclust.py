@@ -8,7 +8,6 @@ Created on Tue May 07 11:08 2019
 import numpy as np
 import itertools as it
 
-
 # -------------------------------------------------------------------
 # --- Utilites ----------------------------------------------------
 # -------------------------------------------------------------------
@@ -39,30 +38,14 @@ class distance_matrix:
     def __len__(self):
         return self.n_elems
 
-    # def __getitem__(self, key):
-    #     # Part I: Single items
-    #     if isinstance(key, slice):
-    #         # Get the start, stop, and step from the slice
-    #         return [self[i] for i in xrange(*key.indices(len(self)))]
-    #     elif isinstance(key, int):
-    #         # Handle negative indices
-    #         if key < 0: 
-    #             key += len(self)
-    #         if key < 0 or key >= len(self):
-    #             raise(IndexError, "The index {} is out of range.".format(key))
-    #         # Get the row
-    #         return [self.lookup_distance(key,i) for i in range(self.n_elems)]
-    #     # Part II: 2-Tuples
-    #     isinstance(key, tuple) and len(key) == 2:
-    #         k1, k2 = *key
-    #         return self.lookup_distance(k1,k2)
-    #     else:
-    #         raise(TypeError, "Invalid argument type.")
-
-    # def __getitem__(self, key):
-    #     if isinstance(key, int):
-            
-    #     elif isinstance(key, slice):
+    def __getitem__(self, key):
+        try:
+            # Always a tuple of ints, no slicing.
+            k1, k2 = key
+            return self.lookup_distance(k1, k2)
+        except:
+            # Failure to lookup.
+            raise IndexError("Key must be a pair of integers.")
 
     def lookup_distance(self, i, j, equal_distance = 0):
         '''
@@ -80,9 +63,17 @@ class distance_matrix:
             return equal_distance
         elif i < j:
             # Look up the correct row:
-            return self._distance_matrix[i*(self.n_elems-1)-i*(i-1)//2 + j-i-1][2]
+            return self._distance_matrix[i*(len(self)-1)-i*(i-1)//2 + j-i-1][2]
         else:
             return self.lookup_distance(j, i, equal_distance)
+
+    def asarray(self):
+        a = np.empty((len(self),len(self)))
+        for i in range(len(self)):
+            for j in range(len(self)):
+                a[i,j] = self[i,j]
+        return a
+
 
 # -------------------------------------------------------------------
 
@@ -101,13 +92,13 @@ def minimax_distance(G, H, distance):
         corresponding center point.  
 
     Arguments:
-        distance: function used to compute distances
+        distance: matrix storing the precomputed distances
     '''
     G_union_H = G + H # list of original indices
     best_center = -1
     best_center_r = np.inf
     for possible_center in G_union_H:
-        center_max_r = max([distance(possible_center, j) for j in G_union_H])
+        center_max_r = max([distance[possible_center, j] for j in G_union_H])
         if center_max_r < best_center_r:
             best_center_r = center_max_r
             best_center = possible_center
@@ -117,25 +108,21 @@ def minimax_distance(G, H, distance):
 # --- Main algorithm ------------------------------------------------
 # -------------------------------------------------------------------
 
-def compute_distance_matrix(X, distance_fn, verbose=False):
-    '''
-    '''
-    if verbose:
-        print('Compute distance matrix...')
-
-    # Class helps to compute distance_fn a minimal number of times
-    dm = distance_matrix(X, distance_fn)
-
-    if verbose:
-        print('\tDone.')
-
-    return dm
-
 
 def protoclust(distance_matrix, verbose=False):
     '''
+    Algorithm computes clusters according to the algorithm in Hierarchical Clustering 
+        With Prototypes via Minimax Linkage by J. Bien and R. Tibshirani.
+        
+    Arguments:
+        distance_matrix: array of distances [i,j] = d(x_i, x_j). All access calls \
+            are made as __getitem__((i,j)) i.e. all accessing within protoclust is made \
+            using integer pairs.
+
+    Returns:
+        
     '''
-    n,_ = dm.shape
+    n,_ = distance_matrix.shape
 
     # TODO: worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
     # Need a big matrix of size (2n-1)^2, prefilled n x n; Extra rows are added at each iteration
