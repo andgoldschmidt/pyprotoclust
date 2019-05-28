@@ -7,6 +7,10 @@ Created on Tue May 07 11:08 2019
 
 import numpy as np
 import itertools as it
+try:
+    from tqdm import tqdm
+except:
+    None
 
 # -------------------------------------------------------------------
 # --- Utilites ----------------------------------------------------
@@ -103,6 +107,15 @@ def minimax_distance(G, H, distance):
             best_center = possible_center
     return [best_center_r, best_center]
 
+def progress(iterable, verbose):
+    if verbose:
+        try:
+            return tqdm(iterable)
+        except NameError:
+            return iterable
+    else:
+        return iterable
+
 # -------------------------------------------------------------------
 # --- Main algorithm ------------------------------------------------
 # -------------------------------------------------------------------
@@ -123,12 +136,11 @@ def protoclust(distance_matrix, verbose=False):
     '''
     n,_ = distance_matrix.shape
 
+    # TODO: What is required for this behavior to be optimal? (e.g. good for np array, fails for sparse array obj.)
     # TODO: worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
     # Need a big matrix of size (2n-1)^2, prefilled n x n; Extra rows are added at each iteration
     big_matrix = np.inf*np.ones((2*n - 1, 2*n - 1))
-    for i in range(n):
-        for j in range(n):
-            big_matrix[i,j] = distance_matrix[i,j]
+    big_matrix[:n, :n] = distance_matrix
 
     # Stores the linkage matrix for scipy
     Z = []
@@ -145,9 +157,7 @@ def protoclust(distance_matrix, verbose=False):
     available_indices = [list(range(n))]
 
     # n-1 merges must occur (iteration denoted l in comments)
-    for iteration in range(0, n-1):
-        if verbose:
-            print(iteration)
+    for iteration in progress(range(0, n-1), verbose):
         # If chain is empty, choose an arbitrary index from those available at this iteration
         chain = chain if chain else [np.random.choice(available_indices[iteration])]
 
