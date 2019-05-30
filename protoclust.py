@@ -8,7 +8,7 @@ Created on Tue May 07 11:08 2019
 import numpy as np
 import itertools as it
 try:
-    from tqdm import tqdm
+    from tqdm import tqdm_notebook, tqdm
 except:
     None
 
@@ -82,10 +82,9 @@ class distance_matrix:
 
 def find_nearest_neighbor(index, distance_matrix, possible_neighbors):
     '''
-    Return the nearest neighbor of index from the set {0,1,2,...,n_elems-1}
-        of possible_neighbors using distance.
+    Return the nearest neighbor of index from the set of possible_neighbors using distance.
     '''
-    return min([[j, distance_matrix[index, j]] for j in possible_neighbors if j != index], key=lambda x: x[1])[0]
+    return possible_neighbors[np.argmin([distance_matrix[index, j] for j in possible_neighbors])]
 
 
 def minimax_distance(G, H, distance):
@@ -94,23 +93,24 @@ def minimax_distance(G, H, distance):
         encircle the space. Then return the minimum such radius and the
         corresponding center point.  
 
+    Assume the distance to oneself is 0.
+
     Arguments:
         distance: matrix storing the precomputed distances
     '''
     G_union_H = G + H # list of original indices
-    best_center = -1
-    best_center_r = np.inf
-    for possible_center in G_union_H:
-        center_max_r = max([distance[possible_center, j] for j in G_union_H])
-        if center_max_r < best_center_r:
-            best_center_r = center_max_r
-            best_center = possible_center
-    return [best_center_r, best_center]
+    maximal_radii = [np.max([distance[possible_center, j] for j in G_union_H]) for possible_center in G_union_H]
+    i = np.argmin(maximal_radii)
+    return [maximal_radii[i], G_union_H[i]]
 
-def progress(iterable, verbose):
+
+def progress(iterable, verbose, notebook):
     if verbose:
         try:
-            return tqdm(iterable)
+            if notebook:
+                return tqdm_notebook(iterable)
+            else:
+                return tqdm(iterable)
         except NameError:
             return iterable
     else:
@@ -121,28 +121,33 @@ def progress(iterable, verbose):
 # -------------------------------------------------------------------
 
 
-def protoclust(distance_matrix, verbose=False):
+def protoclust(distance_matrix, verbose=False, notebook=False):
     '''
     Algorithm computes clusters according to the algorithm in Hierarchical Clustering 
         With Prototypes via Minimax Linkage by J. Bien and R. Tibshirani.
         
     Arguments:
-        distance_matrix: array of distances [i,j] = d(x_i, x_j). All access calls \
+        distance_matrix: numpy array of distances [i,j] = d(x_i, x_j). All access calls \
             are made as __getitem__((i,j)) i.e. all accessing within protoclust is made \
             using integer pairs.
+        verbose: Set as true to show a status bar
+        notebook: Set as true if using a jupyter notebook
 
     Returns:
+        Z: hierarchical clustering default (see scipy docs)
+        clustering: the set of indices of each index
+        clustering_centers: the center of each index
+        clustering_distances: the minimax radius measured from the center at each index
         
     '''
     n,_ = distance_matrix.shape
 
-    # TODO: What is required for this behavior to be optimal? (e.g. good for np array, fails for sparse array obj.)
-    # TODO: worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
+    # TODO: Worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
     # Need a big matrix of size (2n-1)^2, prefilled n x n; Extra rows are added at each iteration
     big_matrix = np.inf*np.ones((2*n - 1, 2*n - 1))
     big_matrix[:n, :n] = distance_matrix
 
-    # Stores the linkage matrix for scipy
+    # Stores the linkage matrix for scipy hierarchical methods
     Z = []
 
     # Start with C_0 = {{x_1},{x_2},...,{x_n}} and d({x_i},{x_j}) = d(x_i,x_j)
@@ -157,7 +162,8 @@ def protoclust(distance_matrix, verbose=False):
     available_indices = [list(range(n))]
 
     # n-1 merges must occur (iteration denoted l in comments)
-    for iteration in progress(range(0, n-1), verbose):
+    for iteration in progress(range(0, n-1), verbose, notebook):
+
         # If chain is empty, choose an arbitrary index from those available at this iteration
         chain = chain if chain else [np.random.choice(available_indices[iteration])]
 
@@ -165,7 +171,7 @@ def protoclust(distance_matrix, verbose=False):
         # This must succeeed within the available indices less 1 for the end of the chain (exception?)
         for igrowth in range(len(available_indices[iteration])-1):
             # Find the index of the closest entry
-            neighbor = find_nearest_neighbor(chain[-1], big_matrix, available_indices[iteration])
+            neighbor = find_nearest_neighbor(chain[-1], big_matrix, [a for a in available_indices[iteration] if a != chain[-1]])
 
             # Look for a loop in the nearest neighbor chain
             if len(chain) > 1 and chain[-2] == neighbor:
