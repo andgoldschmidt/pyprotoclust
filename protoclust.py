@@ -98,10 +98,14 @@ def minimax_distance(G, H, distance):
     Arguments:
         distance: matrix storing the precomputed distances
     '''
-    G_union_H = G + H # list of original indices
+    G_union_H = it.chain(G, H) # iterate over original indices
     maximal_radii = [np.max([distance[possible_center, j] for j in G_union_H]) for possible_center in G_union_H]
     i = np.argmin(maximal_radii)
-    return [maximal_radii[i], G_union_H[i]]
+    if i < len(G):
+        center = G[i]
+    else:
+        center = H[i - len(G)]
+    return [maximal_radii[i], center]
 
 
 def progress(iterable, verbose, notebook):
