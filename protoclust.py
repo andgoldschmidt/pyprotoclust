@@ -86,7 +86,6 @@ def find_nearest_neighbor(index, distance_matrix, possible_neighbors):
     '''
     return possible_neighbors[np.argmin([distance_matrix[index, j] for j in possible_neighbors])]
 
-
 def minimax_distance(G, H, distance):
     '''
     For each point in G+H, find the maximal radius at that point to
@@ -98,15 +97,15 @@ def minimax_distance(G, H, distance):
     Arguments:
         distance: matrix storing the precomputed distances
     '''
-    G_union_H = it.chain(G, H) # iterate over original indices
-    maximal_radii = [np.max([distance[possible_center, j] for j in G_union_H]) for possible_center in G_union_H]
-    i = np.argmin(maximal_radii)
-    if i < len(G):
-        center = G[i]
-    else:
-        center = H[i - len(G)]
-    return [maximal_radii[i], center]
-
+    G_union_H = G + H # list of original indices (multiple iterations nec.)
+    best_center = -1
+    best_center_r = np.inf
+    for possible_center in G_union_H:
+        center_max_r = max([distance[possible_center, j] for j in G_union_H])
+        if center_max_r < best_center_r:
+            best_center_r = center_max_r
+            best_center = possible_center
+    return [best_center_r, best_center]
 
 def progress(iterable, verbose, notebook):
     if verbose:
@@ -148,7 +147,7 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
 
     # TODO: Worry about memory optimization later (it's (2n-1)^2 vs 2n-1 choose 2)
     # Need a big matrix of size (2n-1)^2, prefilled n x n; Extra rows are added at each iteration
-    big_matrix = np.inf*np.ones((2*n - 1, 2*n - 1))
+    big_matrix = np.zeros((2*n - 1, 2*n - 1))
     big_matrix[:n, :n] = distance_matrix
 
     # Stores the linkage matrix for scipy hierarchical methods
