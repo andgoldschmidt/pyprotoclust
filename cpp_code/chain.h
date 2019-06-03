@@ -48,7 +48,7 @@ namespace minimax {
             std::default_random_engine generator;
 
             std::vector<int> chain;
-            std::vector<std::vector<float>> full_distance_matrix; // TODO: Make upper triangular (use float for memory)
+            std::vector<std::vector<float> > full_distance_matrix; // TODO: Make upper triangular (use float for memory)
             std::vector<int> available_indicies;
 
             /**

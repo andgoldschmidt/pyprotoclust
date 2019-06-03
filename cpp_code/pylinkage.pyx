@@ -25,7 +25,9 @@ cdef class PyLinkage:
 
         self.c_linkage.clear_GH()
 
-        return self.c_linkage.get_minimax_distance(), self.c_linkage.get_minimax_center()    
+        dist = self.c_linkage.get_minimax_distance()
+        center = self.c_linkage.get_minimax_center() 
+        return dist,center
 
     def initialize_distances(self, init_distances):
         n = len(init_distances)

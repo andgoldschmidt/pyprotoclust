@@ -4,3 +4,6 @@ Playground/
 Helpers/__pycache_
 __pycache__
 .vscode
+build/
+*.so
+*.o
