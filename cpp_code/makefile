@@ -1,7 +1,7 @@
 CXX= g++
 CFLAGS=  -g -O2	
 
-all: chain.o linkage.o
+all: chain.o linkage.o distance.o
 	python setup.py build_ext --inplace
 
 chain.o: chain.cpp chain.h
@@ -10,7 +10,10 @@ chain.o: chain.cpp chain.h
 linkage.o: linkage.cpp linkage.h
 	$(CXX) $(CFLAGS) -c linkage.cpp
 
+distance.o: distance.cpp distance.h
+	$(CXX) $(CFLAGS) -c distance.cpp
+
 clean: # -f so this will succeed even if the files don't exist
-	rm -f protoclust chain.o linkage.o 
-	rm -f pylinkage.cpp pychain.cpp
-	rm -f pychain.cpython-36m-x86_64-linux-gnu.so pylinkage.cpython-36m-x86_64-linux-gnu.so
+	rm -f protoclust chain.o linkage.o distance.o
+	rm -f pylinkage.cpp pychain.cpp pydistance.cpp
+	rm -f pychain.cpython-36m-x86_64-linux-gnu.so pylinkage.cpython-36m-x86_64-linux-gnu.so pydistance.cpython-36m-x86_64-linux-gnu.so

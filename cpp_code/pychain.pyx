@@ -25,7 +25,7 @@ cdef class PyChain:
             for j in range(i):
                 self.update_distance(i,j,init_distance[i,j])
 
-    def update_distance(self, int index1, int index2, float distance):
+    def update_distance(self, int index1, int index2, double distance):
         self.c_chain.set_distance(index1, index2, distance)        
 
     def get_rnn(self):

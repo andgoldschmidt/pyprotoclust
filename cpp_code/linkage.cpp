@@ -7,7 +7,7 @@ namespace minimax {
         this->n_elems = size;
 
         // Construct distance matrix with default 0 (no need to enter diagonal)
-        this->distance_matrix = std::vector<std::vector<float>> (size, std::vector<float>(size, 0));
+        this->distance_matrix = std::vector<std::vector<double>> (size, std::vector<double>(size, 0));
 
         // Initialize index sets
         this->G.reserve(size);
@@ -16,7 +16,7 @@ namespace minimax {
 
     void Linkage::minimax_linkage() {
         int best_center = -1;
-        float best_radius = std::numeric_limits<float>::max();
+        double best_radius = std::numeric_limits<double>::max();
         
         std::vector<int> G_union_H;
         G_union_H.reserve( this->G.size() + this->H.size() ); // preallocate memory
@@ -25,7 +25,7 @@ namespace minimax {
 
         // Get the minimal of the max radii
         for (int possible_center : G_union_H) {
-            float current_max = -1;
+            double current_max = -1;
             // Get the max radius
             for (int elem : G_union_H){
                 auto r = this->distance_matrix[possible_center][elem];
@@ -41,7 +41,7 @@ namespace minimax {
         this->center = best_center;
     }
 
-    void Linkage::set_distance(int i, int j, float dist) {
+    void Linkage::set_distance(int i, int j, double dist) {
         this->distance_matrix[i][j] = dist;
         this->distance_matrix[j][i] = dist;
     }

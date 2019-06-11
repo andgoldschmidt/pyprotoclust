@@ -15,7 +15,7 @@ namespace minimax{
         this->generator = std::default_random_engine(rand_dev());
 
         // Construct full matrix (n initial and n-1 joins) with default 0 (no need to enter diagonal)
-        this->full_distance_matrix = std::vector<std::vector<float>> (2*size-1, std::vector<float>(2*size-1, 0));
+        this->full_distance_matrix = std::vector<std::vector<double>> (2*size-1, std::vector<double>(2*size-1, 0));
 
         // Max chain size
         this->chain.reserve(size);
@@ -49,7 +49,7 @@ namespace minimax{
         }
     }
 
-    void Chain::set_distance(int index1, int index2, float distance) {
+    void Chain::set_distance(int index1, int index2, double distance) {
         this->full_distance_matrix[index1][index2] = distance;
         this->full_distance_matrix[index2][index1] = distance;
     }
@@ -83,7 +83,7 @@ namespace minimax{
     int Chain::nearest(int index) {
         // Default
         int nearest = -1;
-        float nearest_dist = std::numeric_limits<float>::max();
+        double nearest_dist = std::numeric_limits<double>::max();
         
         for (auto j : this->available_indicies) {
             if (j == index)

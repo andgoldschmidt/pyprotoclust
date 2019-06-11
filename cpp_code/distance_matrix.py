@@ -9,7 +9,7 @@ import numpy as np
 import itertools as it
 
 class distance_matrix:
-    def __init__(self, X, distance_fn):
+    def __init__(self, X, distance_fn, verbose=False, notebook=False):
         '''
         Construct a distance matrix D={i,j, d(x_i,x_j): for all x_i, x_j in X}. 
             The matrix is symmetric so we just compute distances for all combinations 

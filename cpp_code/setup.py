@@ -8,3 +8,7 @@ setup(
 setup(
     ext_modules= cythonize("pylinkage.pyx")
 )
+
+setup(
+    ext_modules= cythonize("pydistance.pyx")
+)

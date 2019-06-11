@@ -34,16 +34,16 @@ namespace minimax {
             void minimax_linkage();
 
             // Setters and Getters
-            float get_minimax_distance() { return this->distance; };
+            double get_minimax_distance() { return this->distance; };
             int get_minimax_center() { return this->center; };
-            void set_distance(int i, int j, float dist);
+            void set_distance(int i, int j, double dist);
 
         private:
-            std::vector<std::vector<float> > distance_matrix;
+            std::vector<std::vector<double> > distance_matrix;
             std::vector<int> G;
             std::vector<int> H;
 
-            float distance;
+            double distance;
             int center;
             int n_elems;
     };

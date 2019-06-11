@@ -25,7 +25,7 @@ namespace minimax {
             /**
              *  Update an entry of the full distance matrix
              **/
-            void set_distance(int index1, int index2, float distance);
+            void set_distance(int index1, int index2, double distance);
 
             /**
              *  Remove the last two elements of the chain
@@ -48,7 +48,7 @@ namespace minimax {
             std::default_random_engine generator;
 
             std::vector<int> chain;
-            std::vector<std::vector<float> > full_distance_matrix; // TODO: Make upper triangular (use float for memory)
+            std::vector<std::vector<double> > full_distance_matrix; // TODO: Make upper triangular (use double for memory)
             std::vector<int> available_indicies;
 
             /**

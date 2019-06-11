@@ -8,7 +8,6 @@ Created on Tue May 07 11:08 2019
 import numpy as np
 import pychain as pyc
 import pylinkage as pyl
-import itertools as it
 try:
     from tqdm import tqdm_notebook, tqdm
 except:
@@ -29,6 +28,7 @@ def progress(iterable, verbose, notebook):
             return iterable
     else:
         return iterable
+
 
 # -------------------------------------------------------------------
 # --- Main algorithm ------------------------------------------------

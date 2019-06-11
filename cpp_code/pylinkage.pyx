@@ -35,5 +35,5 @@ cdef class PyLinkage:
             for j in range(i): # Defaults to 0 (so skip diagonals)
                 self.set_distance(i,j,init_distances[i,j])
 
-    def set_distance(self, int x, int y, float distance):
+    def set_distance(self, int x, int y, double distance):
         self.c_linkage.set_distance(x,y,distance)
