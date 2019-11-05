@@ -5,7 +5,9 @@ py_src = 'src/'
 cpp_src = 'cpp/src/'
 cpp_h = 'cpp/include/'
 
-USE_CYTHON = False # TODO: How to use this variable?
+# If False, use cythonized cpps to compile.
+# TODO: How to set?
+USE_CYTHON = False 
 
 ext = '.pyx' if USE_CYTHON else '.cpp'
 

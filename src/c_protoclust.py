@@ -50,9 +50,7 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
     Returns:
         Z: hierarchical clustering default (see scipy docs)
         clustering: the set of indices of each index
-        clustering_centers: the center of each index
-        clustering_distances: the minimax radius measured from the center at each index
-        
+        clustering_centers: the center of each index        
     '''
     n,_ = distance_matrix.shape
 
@@ -68,7 +66,6 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
     # Start with C_0 = {{x_1},{x_2},...,{x_n}} and d({x_i},{x_j}) = d(x_i,x_j)
     clustering = [[i] for i in range(n)] # List of subsets of {0,1,...,n-1} (length = n + iterations)
     clustering_centers = [i for i in range(n)] # List of points in {0,1,...,n-1} (length = n + iterations)
-    clustering_distances = [0 for i in range(n)] # List of positive real distances (length = n + iterations) (always increases)
 
     # Keep track of the available indices at each iteration (also have this hiding in chain)
     available_indices = [list(range(n))]
@@ -88,7 +85,6 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
         # Add the new cluster to the record
         clustering.append(G1 + G2)
         clustering_centers.append(G1G2_center)
-        clustering_distances.append(G1G2_distance)
 
         # Update the new cluster distances for all available indices
         for a in available_indices[iteration]:
@@ -106,4 +102,4 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
         # Python index update
         available_indices.append([a for a in available_indices[iteration] if a not in RNN_pair] + [n + iteration])
 
-    return Z, [clustering, clustering_centers, clustering_distances]
+    return Z, [clustering, clustering_centers]
