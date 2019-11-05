@@ -11,7 +11,8 @@ USE_CYTHON = False
 
 ext = '.pyx' if USE_CYTHON else '.cpp'
 
-# Link to py pxd or compile py cpp files. In either case, source original (non-python) h/cpp.
+# Link to py's pxd or py's cpp files. 
+# In either case, source original (non-python) h/cpp to compile correctly.
 e1 = Extension('pychain', [py_src + 'pychain' + ext, cpp_src + 'chain.cpp'], include_dirs=[cpp_h])
 e2 = Extension('pylinkage', [py_src + 'pylinkage' + ext, cpp_src + 'linkage.cpp'], include_dirs=[cpp_h])
 extensions = [e1,e2]
