@@ -1,4 +1,3 @@
-# distutils: sources = linkage.cpp
 # distutils: language = c++
 
 from pylinkage cimport Linkage

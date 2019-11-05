@@ -1,4 +1,3 @@
-# distutils: sources = chain.cpp
 # distutils: language = c++
 
 from pychain cimport Chain
