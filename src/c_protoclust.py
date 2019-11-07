@@ -62,12 +62,13 @@ def protoclust(distance_matrix, verbose=False, notebook=False):
 
     # Stores the linkage matrix for scipy hierarchical methods
     Z = []
+    # List of subsets of {0,1,...,n-1} (length = n + iterations)
+    clustering = [[i] for i in range(n)] 
+    # List of points in {0,1,...,n-1} (length = n + iterations)
+    clustering_centers = [i for i in range(n)]
 
-    # Start with C_0 = {{x_1},{x_2},...,{x_n}} and d({x_i},{x_j}) = d(x_i,x_j)
-    clustering = [[i] for i in range(n)] # List of subsets of {0,1,...,n-1} (length = n + iterations)
-    clustering_centers = [i for i in range(n)] # List of points in {0,1,...,n-1} (length = n + iterations)
-
-    # Keep track of the available indices at each iteration (also have this hiding in chain)
+    # Keep track of the available indices at each iteration 
+    # (also have this hiding in chain)
     available_indices = [list(range(n))]
 
     # n-1 merges must occur (iteration denoted l in comments)

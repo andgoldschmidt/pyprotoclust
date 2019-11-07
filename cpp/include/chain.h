@@ -16,6 +16,7 @@ namespace minimax {
 
             // Size is constrained by RAND_MAX and INT_MAX
             Chain(int size);
+            Chain(const std::vector<std::vector<double> >& dm);
 
             /** 
              *  Iterate over available indices from the current chain to find the next pair of recurrent nearest neighbors
@@ -33,7 +34,14 @@ namespace minimax {
             void trim_chain();
 
             /**
-             *  Using the current chain, update the available indicies for iteration
+             *  Using the current chain, update the available indicies for iteration.
+             * 
+             *  TODO: Refactor iteration -> new index
+             * 
+             *  Parameters:
+             *      int r1: remove from available indices
+             *      int r2: remove from available indices
+             *      int iteration:  new available index = iteration + number of original indices
              **/
             void merge_indicies(int r1, int r2, int iteration);
 
@@ -41,6 +49,9 @@ namespace minimax {
             bool can_grow() { return this->available_indicies.size() > 1; };
             int chain_end_1() { return this->chain.empty() ? -1 : this->chain.back(); };
             int chain_end_2() { return this->chain.size() < 2 ? -1 : this->chain[this->chain.size()-2]; };
+
+            // Read-only access to available indices
+            const std::vector<int>& get_available_indicies() { return this->available_indicies; };
 
         private:
             int n_elems;

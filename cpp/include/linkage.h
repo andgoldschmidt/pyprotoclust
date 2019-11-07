@@ -8,6 +8,7 @@ namespace minimax {
         public:
             Linkage() {};
             Linkage(int size);
+            Linkage(const std::vector<std::vector<double> >& dm);
             
             /** Construct the list of indices G to merge, entry by entry **/
             void add_to_G(int entry);
@@ -32,6 +33,8 @@ namespace minimax {
              *   - Stores the minimax this->distance and this->center point for G+H.
              **/
             void minimax_linkage();
+            // Directly load G and H.
+            void minimax_linkage(const std::vector<int>& G, const std::vector<int>& H);
 
             // Setters and Getters
             double get_minimax_distance() { return this->distance; };

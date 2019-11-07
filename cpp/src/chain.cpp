@@ -7,7 +7,7 @@ namespace minimax{
 
     // -- Public
 
-    Chain::Chain (int size) {
+    Chain::Chain(int size) {
         // Requires 2*SIZE - 1 less than RAND_MAX and INT_MAX
 
         // Construct random number generator
@@ -16,6 +16,30 @@ namespace minimax{
 
         // Construct full matrix (n initial and n-1 joins) with default 0 (no need to enter diagonal)
         this->full_distance_matrix = std::vector<std::vector<double>> (2*size-1, std::vector<double>(2*size-1, 0));
+
+        // Max chain size
+        this->chain.reserve(size);
+
+        // Available indices are originally {0,1,...,n-1}
+        this->available_indicies.reserve(size);
+        for (int i = 0; i < size; ++i)
+            this->available_indicies.emplace_back(i);
+
+        this->n_elems = size;
+    }
+
+    Chain::Chain(const std::vector<std::vector<double> >& dm) {
+        // Requires 2*SIZE - 1 less than RAND_MAX and INT_MAX
+        int size = dm.size();
+
+        // Construct random number generator
+        std::random_device rand_dev;
+        this->generator = std::default_random_engine(rand_dev());
+
+        // Construct full matrix (n initial and n-1 joins) with default 0 (no need to enter diagonal)
+        this->full_distance_matrix = std::vector<std::vector<double>> (2*size-1, std::vector<double>(2*size-1, 0));
+        // Copy in initial dm for first n entries
+        std::copy(dm.begin(), dm.end(), this->full_distance_matrix.begin());
 
         // Max chain size
         this->chain.reserve(size);
@@ -55,7 +79,6 @@ namespace minimax{
     }
 
     void Chain::merge_indicies(int r1, int r2, int iteration) {
-        // TODO: Refactor? 2*n instead of n
         this->available_indicies.erase(
              std::remove( this->available_indicies.begin(), this->available_indicies.end(), r1 ),
              this->available_indicies.end() );

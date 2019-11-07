@@ -14,6 +14,24 @@ namespace minimax {
         this->H.reserve(size);
     }
 
+    Linkage::Linkage(const std::vector<std::vector<double> >& dm) {
+        this->n_elems = dm.size();
+
+        // Load distance matrix
+        this->distance_matrix = dm;
+
+        // Initialize index sets
+        this->G.reserve(this->n_elems);
+        this->H.reserve(this->n_elems);
+    }
+
+    void Linkage::minimax_linkage(const std::vector<int>& G, const std::vector<int>& H) {
+        this->G = G;
+        this->H = H;
+        this->minimax_linkage();
+        this->clear_GH();
+    }
+
     void Linkage::minimax_linkage() {
         int best_center = -1;
         double best_radius = std::numeric_limits<double>::max();
