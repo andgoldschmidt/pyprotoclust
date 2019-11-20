@@ -84,7 +84,7 @@ namespace minimax {
             // The original indices comprising the cluster associated with each index
             std::vector< std::vector<int>> cluster; // Length: 2 n_elems -1
 
-            // The original index associated with the cneter of each index.
+            // The original index associated with the center of each index.
             std::vector<int> cluster_centers; // Length: 2 n_elems -1
 
     };

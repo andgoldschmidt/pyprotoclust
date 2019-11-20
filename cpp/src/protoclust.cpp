@@ -85,7 +85,7 @@ namespace minimax{
             //   new G1, G2 using all underlying points
             std::tuple<double, int> G1_G2_res = this->linkage.minimax_linkage(G1, G2);
             double G1G2_distance = std::get<0>(G1_G2_res);
-            cluster_centers[this->n_elems + i] = std::get<1>(G1_G2_res);
+            this->cluster_centers[this->n_elems + i] = std::get<1>(G1_G2_res);
 
             // Update the linkage matrix
             this->update_Z(i, rnn1, rnn2, G1G2_distance, G1G2_size);

@@ -7,11 +7,10 @@
 #include <iomanip>      // std::setw
 
 int main(int argc, char ** argv) {
-    int size = 10000;
-    std::cout << "Start: " << std::endl;
+    int size = 20;
     std::vector< std::vector<double>> v = std::vector<std::vector<double>> (size, std::vector<double>(size, 0));
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 10; ++i)
         std::rand();
 
     for(int i = 0; i < size; ++i) {

@@ -18,6 +18,7 @@ cdef class PyProtoclust:
         # self.n = n
         self.c_protoclust = Protoclust(n)
 
+    # Should look at ways to improve this! Parallelize?
     def initialize_distances(self, init_distance):
         n = len(init_distance)
         for i in range(n):
@@ -39,8 +40,10 @@ cdef class PyProtoclust:
                  self.c_protoclust.get_Z_2(i),
                  self.c_protoclust.get_Z_3(i)]
                 for i in range(n-1)]
-                
+
+    def center(self, int i):
+        return self.c_protoclust.get_cluster_center(i)        
+
     def cluster_centers(self, int n):
-        return [self.c_protoclust.get_cluster_center(i)
-                for i in range(n-1)]
+        return [self.center(i) for i in range(2*n-1)]
             
