@@ -7,6 +7,7 @@ namespace minimax{
 
     // -- Public
 
+    // TODO: Allow fixed random seed for testing
     Chain::Chain(int size) {
         // Requires 2*SIZE - 1 less than RAND_MAX and INT_MAX
 
@@ -28,28 +29,10 @@ namespace minimax{
         this->n_elems = size;
     }
 
-    Chain::Chain(const std::vector<std::vector<double> >& dm) {
-        // Requires 2*SIZE - 1 less than RAND_MAX and INT_MAX
-        int size = dm.size();
-
-        // Construct random number generator
-        std::random_device rand_dev;
-        this->generator = std::default_random_engine(rand_dev());
-
-        // Construct full matrix (n initial and n-1 joins) with default 0 (no need to enter diagonal)
-        this->full_distance_matrix = std::vector<std::vector<double>> (2*size-1, std::vector<double>(2*size-1, 0));
+    Chain::Chain(const std::vector<std::vector<double> >& dm) 
+                : Chain(dm.size()) {
         // Copy in initial dm for first n entries
         std::copy(dm.begin(), dm.end(), this->full_distance_matrix.begin());
-
-        // Max chain size
-        this->chain.reserve(size);
-
-        // Available indices are originally {0,1,...,n-1}
-        this->available_indicies.reserve(size);
-        for (int i = 0; i < size; ++i)
-            this->available_indicies.emplace_back(i);
-
-        this->n_elems = size;
     }
 
     void Chain::grow_chain() {
@@ -63,7 +46,7 @@ namespace minimax{
         }
 
         // Guaranteed to exit before completing this worst-case loop
-        for (int i = 0; i < this->available_indicies.size() - 1; ++i) {
+        for (unsigned int i = 0; i < this->available_indicies.size() - 1; ++i) {
             int neighbor = this->nearest(this->chain.back());
             // Check for a recurrent nearest neighbor (in chain: {..ab}, neighbor: a)
             if (this->chain.size() > 1 && this->chain[this->chain.size()-2] == neighbor)

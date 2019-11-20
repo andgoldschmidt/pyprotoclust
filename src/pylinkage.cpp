@@ -12,7 +12,8 @@
         "language": "c++",
         "name": "pylinkage",
         "sources": [
-            "src/pylinkage.pyx"
+            "src/pylinkage.pyx",
+            "cpp/src/linkage.cpp"
         ]
     },
     "module_name": "pylinkage"

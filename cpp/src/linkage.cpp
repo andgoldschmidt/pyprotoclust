@@ -14,32 +14,27 @@ namespace minimax {
         this->H.reserve(size);
     }
 
-    Linkage::Linkage(const std::vector<std::vector<double> >& dm) {
-        this->n_elems = dm.size();
-
-        // Load distance matrix
+    Linkage::Linkage(const std::vector<std::vector<double> >& dm)
+                    : Linkage(dm.size()) {
+        // Copy in this distance matrix
         this->distance_matrix = dm;
-
-        // Initialize index sets
-        this->G.reserve(this->n_elems);
-        this->H.reserve(this->n_elems);
-    }
-
-    void Linkage::minimax_linkage(const std::vector<int>& G, const std::vector<int>& H) {
-        this->G = G;
-        this->H = H;
-        this->minimax_linkage();
-        this->clear_GH();
     }
 
     void Linkage::minimax_linkage() {
+        std::tuple<double, int> result = this->minimax_linkage(this->G, this->H);
+        this->clear_GH();
+        this->distance = std::get<0>(result);
+        this->center = std::get<1>(result);
+    }
+
+    std::tuple<double, int> const Linkage::minimax_linkage(const std::vector<int>& Gg, const std::vector<int>& Hh) {
         int best_center = -1;
         double best_radius = std::numeric_limits<double>::max();
         
         std::vector<int> G_union_H;
-        G_union_H.reserve( this->G.size() + this->H.size() ); // preallocate memory
-        G_union_H.insert( G_union_H.end(), this->G.begin(), this->G.end() );
-        G_union_H.insert( G_union_H.end(), this->H.begin(), this->H.end() );
+        G_union_H.reserve( Gg.size() + Hh.size() ); // preallocate memory
+        G_union_H.insert( G_union_H.end(), Gg.begin(), Gg.end() );
+        G_union_H.insert( G_union_H.end(), Hh.begin(), Hh.end() );
 
         // Get the minimal of the max radii
         for (int possible_center : G_union_H) {
@@ -55,8 +50,7 @@ namespace minimax {
                 best_center = possible_center;
             }
         }
-        this->distance = best_radius;
-        this->center = best_center;
+        return std::make_tuple(best_radius, best_center);
     }
 
     void Linkage::set_distance(int i, int j, double dist) {

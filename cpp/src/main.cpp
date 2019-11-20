@@ -1,32 +1,27 @@
+#include "protoclust.h"
 #include "chain.h"
+#include <vector>
 #include <random>
 #include <iostream>
 #include <string>
+#include <iomanip>      // std::setw
 
 int main(int argc, char ** argv) {
-    // int size = 10;
-    // minimax::Chain mychain = minimax::Chain(size);
+    int size = 10000;
+    std::cout << "Start: " << std::endl;
+    std::vector< std::vector<double>> v = std::vector<std::vector<double>> (size, std::vector<double>(size, 0));
 
-    // for(int i = 0; i < size; ++i) {
-    //     for(int j = 0; j <= i; ++j) {
-    //         auto x = i == j? 0 : ((double) std::rand() / (RAND_MAX ));
-    //         mychain.set_distance(i,j,x);
-    //         // std::cout << std::to_string(x) << " ";
-    //     }
-    //     // std::cout << std::endl;
-    // }
-    // std::cout << std::endl;
+    for (int i = 0; i < 1000; ++i)
+        std::rand();
 
-    // for(int merge = 0; merge < size - 1; ++merge) {
-    //     mychain.grow_chain();
-    //     int x = mychain.chain_end_1();
-    //     int y = mychain.chain_end_2();
-    //     mychain.merge_indicies(x,y,merge);
-    //     mychain.trim_chain();
-    //     // std::cout << "( " << std::to_string(x) << ", "
-    //     //           << std::to_string(y) << " )" << std::endl;
-    // }
-    // std::cout << "End test." << std::endl;
-    std::cout << "Hello, World!";
+    for(int i = 0; i < size; ++i) {
+        for(int j = 0; j <= i; ++j) {
+            auto x = i == j? 0 : ((double) std::rand() / (RAND_MAX ));
+            v[i][j] = x;
+            v[j][i] = x;
+        }
+    }
+    minimax::Protoclust h = minimax::Protoclust(v);
+    h.compute();
     return 0;
 }
