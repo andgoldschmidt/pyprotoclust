@@ -7,32 +7,26 @@ namespace minimax{
 
     // -- Public
 
-    // TODO: Allow fixed random seed for testing
-    Chain::Chain(int size) {
-        // Requires 2*SIZE - 1 less than RAND_MAX and INT_MAX
+    Chain::Chain(std::shared_ptr<LTMatrix<float> > full_distance_matrix){
+        // Requires 2*n_elems - 1 less than RAND_MAX and INT_MAX
+        // full_distance_matrix has 2*n_elems-1 entries
+        this->n_elems = (full_distance_matrix->size()+1)/2;
 
         // Construct random number generator
+        // TODO: Allow fixed random seed for testing
         std::random_device rand_dev;
         this->generator = std::default_random_engine(rand_dev());
 
-        // Construct full matrix (n initial and n-1 joins) with default 0 (no need to enter diagonal)
-        this->full_distance_matrix = std::vector<std::vector<double>> (2*size-1, std::vector<double>(2*size-1, 0));
-
         // Max chain size
-        this->chain.reserve(size);
+        this->chain.reserve(this->n_elems);
 
         // Available indices are originally {0,1,...,n-1}
-        this->available_indicies.reserve(size);
-        for (int i = 0; i < size; ++i)
+        this->available_indicies.reserve(this->n_elems);
+        for (int i = 0; i < this->n_elems; ++i)
             this->available_indicies.emplace_back(i);
 
-        this->n_elems = size;
-    }
-
-    Chain::Chain(const std::vector<std::vector<double> >& dm) 
-                : Chain(dm.size()) {
-        // Copy in initial dm for first n entries
-        std::copy(dm.begin(), dm.end(), this->full_distance_matrix.begin());
+        // Load full matrix (n initial and n-1 joins)
+        this->full_distance_matrix = full_distance_matrix;
     }
 
     void Chain::grow_chain() {
@@ -56,11 +50,6 @@ namespace minimax{
         }
     }
 
-    void Chain::set_distance(int index1, int index2, double distance) {
-        this->full_distance_matrix[index1][index2] = distance;
-        this->full_distance_matrix[index2][index1] = distance;
-    }
-
     void Chain::merge_indicies(int r1, int r2, int iteration) {
         this->available_indicies.erase(
              std::remove( this->available_indicies.begin(), this->available_indicies.end(), r1 ),
@@ -73,9 +62,8 @@ namespace minimax{
         this->available_indicies.emplace_back(this->n_elems + iteration); 
     }
 
-    // NOTE: 
-    // Fails to remove all occurences of end values in the case of self loops caused
-    // by equal values.
+    // NOTE: Fails to remove all occurences of end values in the case of 
+    //       self loops caused by equal values (see: grow_chain())
     void Chain::trim_chain() {
         int remove_two = 0;
         while (!this->chain.empty() && remove_two < 2) {
@@ -84,19 +72,16 @@ namespace minimax{
         }
     }
 
-    // -- Private
-
     int Chain::nearest(int index) {
-        // Default
         int nearest = -1;
         double nearest_dist = std::numeric_limits<double>::max();
         
         for (auto j : this->available_indicies) {
             if (j == index)
                 continue;
-            else if (this->full_distance_matrix[index][j] < nearest_dist) {
+            else if (this->full_distance_matrix->get(index, j) < nearest_dist) {
                 nearest = j;
-                nearest_dist = this->full_distance_matrix[index][j];
+                nearest_dist = this->full_distance_matrix->get(index, j);
             }
         }
 

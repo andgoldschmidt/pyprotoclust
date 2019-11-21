@@ -3,7 +3,9 @@
 
 #include "chain.h"
 #include "linkage.h"
+#include "ltmatrix.h"
 #include <vector>
+#include <memory>
 
 namespace minimax {
 
@@ -14,19 +16,17 @@ namespace minimax {
                 this->n_elems = 0;
             };
             Protoclust(int n);
-            Protoclust(const std::vector< std::vector<double>>& dm);
+            Protoclust(const std::vector< std::vector<float>>& dm);
 
             /**
              *  Set distance_matrix[i, j] = distance_matrix[j, i] = distance.
              **/
-            void set_distance(int i, int j, double distance);
+            void set_distance(int i, int j, float distance);
 
             /**
              * Computes the hierarchical clustering according to the minimax linkage.
              * 
-             * Requires that the distance_matrix has been set to the desired values. Assume 
-             * that the internal state is such that the chain and linkage objects are now
-             * built with the current distance_matrix.
+             * Requires that the distance_matrix has been set to the desired values.
              */
             void compute();
 
@@ -40,34 +40,24 @@ namespace minimax {
              *      (i) Argument i < n_elems - 1 (number of allowed merges). The internal
              *          state of this class is assumed to be such that {0,1,...,i-1} were
              *          called previous to the current argument i.
-             *      (ii) The distance matrix is unchanged (TODO: Throw exception?)
+             *      (ii) The distance matrix is unchanged throughout.
              */
             void compute_index(const int i);
 
-            // Get Z
+            // Accessors
             int get_Z_0(int i) { return this->Z_0[i]; };
             int get_Z_1(int i) { return this->Z_1[i]; };
             double get_Z_2(int i) { return this->Z_2[i]; };
             int get_Z_3(int i) { return this->Z_3[i]; };
-
-            // Get clusters and cluster centers
-            std::vector<int> get_cluster(int i) { return this->cluster[i]; }; // TODO: How to handle?
             int get_cluster_center(int i) { return this->cluster_centers[i]; };
-
 
         private:
             int n_elems;
-            std::vector< std::vector<double>> distance_matrix; // n_elems by n_elems
+
+            // Full distance matrix (n_elems initial points and n_elems-1 joins)
+            std::shared_ptr<LTMatrix<float> > full_distance_matrix;
             Chain chain;
             Linkage linkage;
-
-            /**
-             *  Pass completely assembled distance matrix to the internal chain and linkage.
-             */ 
-            void finalize_distance();
-
-            // Used for finalize_distance() when incrementally setting distance matrix
-            bool needs_finalization;
 
             /** 
              * Elements of the n-1 by 4 linkage matrix (for scipy.cluster.hierarchy.linkage)

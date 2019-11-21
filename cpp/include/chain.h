@@ -1,32 +1,26 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
-#include <vector>
-#include <list>
-#include <random>
+#include "ltmatrix.h"
 #include <limits>
+#include <memory>
+#include <random>
+#include <vector>
 
 namespace minimax {
 
     class Chain {
         public:
-
             // Default does no inits
             Chain () {};
 
             // Size is constrained by RAND_MAX and INT_MAX
-            Chain(int size);
-            Chain(const std::vector<std::vector<double> >& dm);
+            Chain(std::shared_ptr<LTMatrix<float> > dm);
 
             /** 
              *  Iterate over available indices from the current chain to find the next pair of recurrent nearest neighbors
              **/
             void grow_chain();
-
-            /**
-             *  Update an entry of the full distance matrix
-             **/
-            void set_distance(int index1, int index2, double distance);
 
             /**
              *  Remove the last two elements of the chain
@@ -59,7 +53,10 @@ namespace minimax {
             std::default_random_engine generator;
 
             std::vector<int> chain;
-            std::vector<std::vector<double> > full_distance_matrix; // TODO: Make upper triangular (use double for memory)
+            
+            // Full distance matrix (n_elems initial points and n_elems-1 joins)
+            std::shared_ptr<LTMatrix<float> > full_distance_matrix;
+
             std::vector<int> available_indicies;
 
             /**

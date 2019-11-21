@@ -1,23 +1,17 @@
 #include "linkage.h"
 #include <limits>
 
-
 namespace minimax {
-    Linkage::Linkage(int size) {
-        this->n_elems = size;
-
-        // Construct distance matrix with default 0 (no need to enter diagonal)
-        this->distance_matrix = std::vector<std::vector<double>> (size, std::vector<double>(size, 0));
+    Linkage::Linkage(std::shared_ptr<LTMatrix<float> > full_distance_matrix) {
+        // full_distance_matrix has 2*n_elems-1 entries
+        this->n_elems = (full_distance_matrix->size()+1)/2;
 
         // Initialize index sets
-        this->G.reserve(size);
-        this->H.reserve(size);
-    }
+        this->G.reserve(this->n_elems);
+        this->H.reserve(this->n_elems);
 
-    Linkage::Linkage(const std::vector<std::vector<double> >& dm)
-                    : Linkage(dm.size()) {
         // Copy in this distance matrix
-        this->distance_matrix = dm;
+        this->distance_matrix = full_distance_matrix;
     }
 
     void Linkage::minimax_linkage() {
@@ -27,7 +21,7 @@ namespace minimax {
         this->center = std::get<1>(result);
     }
 
-    std::tuple<double, int> const Linkage::minimax_linkage(const std::vector<int>& Gg, const std::vector<int>& Hh) {
+    std::tuple<double, int> Linkage::minimax_linkage(const std::vector<int>& Gg, const std::vector<int>& Hh) const {
         int best_center = -1;
         double best_radius = std::numeric_limits<double>::max();
         
@@ -41,7 +35,7 @@ namespace minimax {
             double current_max = -1;
             // Get the max radius
             for (int elem : G_union_H){
-                auto r = this->distance_matrix[possible_center][elem];
+                auto r = this->distance_matrix->get(possible_center, elem);
                 if (current_max < r)
                     current_max = r;
             }
@@ -51,11 +45,6 @@ namespace minimax {
             }
         }
         return std::make_tuple(best_radius, best_center);
-    }
-
-    void Linkage::set_distance(int i, int j, double dist) {
-        this->distance_matrix[i][j] = dist;
-        this->distance_matrix[j][i] = dist;
     }
     
     void Linkage::add_to_G(int entry) {

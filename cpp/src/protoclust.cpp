@@ -5,10 +5,12 @@ namespace minimax{
     Protoclust::Protoclust(int n) {
         this->n_elems = n;
 
-        // Construct matrix with zeros (don't initialize change and linkage yet)
-        this->distance_matrix = std::vector<std::vector<double>> (this->n_elems, std::vector<double>(this->n_elems, 0));
-        this->needs_finalization = true;
-
+        // Full distance matrix (n_elems initial points and n_elems-1 joins).
+        this->full_distance_matrix = std::make_shared<LTMatrix<float> >(2*this->n_elems - 1);
+        // Inform chain and linkage function about the distance matrix created here.
+        this->chain = Chain(this->full_distance_matrix);
+        this->linkage = Linkage(this->full_distance_matrix);
+        
         // List of subsets of {0,1,...,n-1} (length = n + (n-1 merges))
         this->cluster.resize(2*this->n_elems - 1);
 
@@ -28,34 +30,23 @@ namespace minimax{
         this->Z_3.resize(this->n_elems - 1);
     }
 
-    Protoclust::Protoclust(const std::vector< std::vector<double>>& dm)
-                          : Protoclust(dm.size()) {
-        this->distance_matrix = dm;
-
-        // Pass copies of the distance_matrix to initialize the chain and linkage
-        this->linkage = Linkage(this->distance_matrix);
-        this->chain = Chain(this->distance_matrix);
-        this->needs_finalization = false;
+    Protoclust::Protoclust(const std::vector< std::vector<float>>& dm) : Protoclust(dm.size()) {
+        // Load distances from dm
+        for(unsigned int i = 0; i < dm.size(); ++i) {
+            for(unsigned int j=0; j <= i; ++j) {
+                this->full_distance_matrix->set(i, j, dm[i][j]);
+            }
+        }
     }
 
-    void Protoclust::set_distance(int i, int j, double dist) {
-        // Distance was updated, reset needs_finalization
-        this->needs_finalization = true;
-        this->distance_matrix[i][j] = dist;
-        this->distance_matrix[j][i] = dist;
-    }
-
-    // TODO: If keeping set_distance, need toggle for this function to 
-    // automatically apply at compute when needed.
-    void Protoclust::finalize_distance() {
-        this->linkage = Linkage(this->distance_matrix);
-        this->chain = Chain(this->distance_matrix);
-        this->needs_finalization = false;
+    void Protoclust::set_distance(int i, int j, float dist) {
+        // i,j < n_elems        
+        this->full_distance_matrix->set(i,j,dist);
     }
 
     void Protoclust::compute() {
         // n.b. all members are initialized according to n_elems
-        // n-1 merges must occur 
+        // n_elems-1 merges must occur 
         for(int i=0; i < this->n_elems - 1; ++i) {
             // allow this loop to occur outside this code (e.g. for status bars)
             this->compute_index(i);
@@ -63,9 +54,6 @@ namespace minimax{
     }
 
     void Protoclust::compute_index(const int i) {
-            if(i==0 && this->needs_finalization)
-                this->finalize_distance(); // TODO: Exception if i!=0 and finalization needed?
-
             this->chain.grow_chain();
             int rnn1 = this->chain.chain_end_2();
             int rnn2 = this->chain.chain_end_1();
@@ -91,13 +79,14 @@ namespace minimax{
             this->update_Z(i, rnn1, rnn2, G1G2_distance, G1G2_size);
 
             // Update cluster distances for (unmerged) available indices
+            // This loop can be run in parallel.
             #pragma omp parallel for
             for(unsigned int ia=0; ia <  this->chain.get_available_indicies().size(); ++ia) {
                 int a = this->chain.get_available_indicies()[ia];
                 if (a != rnn1 && a != rnn2) {
                     std::tuple<double, int> result = this->linkage.minimax_linkage(cluster[this->n_elems + i], cluster[a]);
                     double distance = std::get<0>(result);
-                    this->chain.set_distance(a, this->n_elems+i, distance);
+                    this->full_distance_matrix->set(a, this->n_elems+i, distance);
                 }
             }
 

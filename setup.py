@@ -12,17 +12,16 @@ USE_CYTHON = True
 ext = '.pyx' if USE_CYTHON else '.cpp'
 
 # Link to py's pxd or py's cpp files. 
+sources = [py_src + 'pyprotoclust' + ext, cpp_src + 'protoclust.cpp',
+           cpp_src + 'linkage.cpp', cpp_src + 'chain.cpp', cpp_src + 'ltmatrix.cpp']
 # In either case, source original (non-python) h/cpp to compile correctly.
-e1 = Extension('pychain', [py_src + 'pychain' + ext, cpp_src + 'chain.cpp'], include_dirs=[cpp_h])
-e2 = Extension('pylinkage', [py_src + 'pylinkage' + ext, cpp_src + 'linkage.cpp'], include_dirs=[cpp_h])
 e3 = Extension('pyprotoclust', 
-               sources=[py_src + 'pyprotoclust' + ext, 
-                        cpp_src + 'protoclust.cpp', cpp_src + 'linkage.cpp', cpp_src + 'chain.cpp'],
+               sources=sources,
                include_dirs=[cpp_h],
                extra_compile_args=['-fopenmp'],
                extra_link_args=['-fopenmp']
               )
-extensions = [e1,e2,e3]
+extensions = [e3]
 
 if USE_CYTHON:
     from Cython.Build import cythonize
