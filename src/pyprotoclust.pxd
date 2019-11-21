@@ -6,7 +6,7 @@ cdef extern from "protoclust.h" namespace "minimax":
         Protoclust() except +
         Protoclust(int) except +
         
-        void set_distance(int i, int j, float distance)
+        void set_distance(int i, int j, double distance) nogil
 
         void compute()
         void compute_index(int i)
@@ -16,5 +16,3 @@ cdef extern from "protoclust.h" namespace "minimax":
         double get_Z_2(int i)
         int get_Z_3(int i)
         int get_cluster_center(int i)
-
-        # vector[int] get_cluster(int i)

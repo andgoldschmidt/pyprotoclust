@@ -1,32 +1,29 @@
 # distutils: language = c++
 
+from numpy import array, dtype
+from itertools import combinations
 from pyprotoclust cimport Protoclust
-
-try:
-    from tqdm import tqdm_notebook, tqdm
-except:
-    None
+from cython.parallel import prange
+from cython import boundscheck, wraparound
+@boundscheck(False)  # Deactivate bounds checking
+@wraparound(False)   # Deactivate negative indexing.
 
 # Create a Cython extension type which holds a C++ instance
 # as an attribute and create a bunch of forwarding methods
 # Python extension type.
 cdef class PyProtoclust:
     cdef Protoclust c_protoclust  # Hold a C++ instance which we're wrapping
-    # cdef public int n # Hold a size member
 
     def __cinit__(self, int n):
-        # self.n = n
         self.c_protoclust = Protoclust(n)
 
-    # Should look at ways to improve this! Parallelize?
-    def initialize_distances(self, init_distance):
-        n = len(init_distance)
-        for i in range(n):
-            for j in range(i):
-                self.set_distance(i,j,init_distance[i,j])
-
-    def set_distance(self, int index1, int index2, double distance):
-        self.c_protoclust.set_distance(index1, index2, distance)
+    def initialize_distances(self, const double[:,:] init_distance):
+        n = init_distance.shape[0]
+        cdef int [:,:] index = array(list(combinations(range(n),2)), dtype=dtype("i"))
+        cdef Py_ssize_t i
+        for i in range(len(index)):
+            self.c_protoclust.set_distance(index[i, 1], index[i, 0],
+                                           init_distance[index[i, 1], index[i, 0]])
 
     def compute(self):
         self.c_protoclust.compute()
