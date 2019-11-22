@@ -3,10 +3,6 @@
 from numpy import array, dtype
 from itertools import combinations
 from pyprotoclust cimport Protoclust
-from cython.parallel import prange
-from cython import boundscheck, wraparound
-@boundscheck(False)  # Deactivate bounds checking
-@wraparound(False)   # Deactivate negative indexing.
 
 # Create a Cython extension type which holds a C++ instance
 # as an attribute and create a bunch of forwarding methods
@@ -17,13 +13,11 @@ cdef class PyProtoclust:
     def __cinit__(self, int n):
         self.c_protoclust = Protoclust(n)
 
-    def initialize_distances(self, const double[:,:] init_distance):
-        n = init_distance.shape[0]
-        cdef int [:,:] index = array(list(combinations(range(n),2)), dtype=dtype("i"))
-        cdef Py_ssize_t i
-        for i in range(len(index)):
-            self.c_protoclust.set_distance(index[i, 1], index[i, 0],
-                                           init_distance[index[i, 1], index[i, 0]])
+    def initialize_distances(self, double[:,:] init_distances):
+        n = len(init_distances)
+        for i in range(n):
+            for j in range(i): # Defaults to 0 (so skip diagonals)
+                self.c_protoclust.set_distance(i,j,init_distances[i,j])
 
     def compute(self):
         self.c_protoclust.compute()

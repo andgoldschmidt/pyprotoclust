@@ -6,5 +6,6 @@ Helpers/__pycache_
 __pycache__
 .vscode
 build/
+main*
 *.so
 *.o
