@@ -2,7 +2,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 import distutils.sysconfig
 
-# Avoid a gcc warning below:
+# Avoid a gcc warning:
 # cc1plus: warning: command line option ‘-Wstrict-prototypes’ is valid for C/ObjC but not for C++
 cfg_vars = distutils.sysconfig.get_config_vars()
 for key, value in cfg_vars.items():
