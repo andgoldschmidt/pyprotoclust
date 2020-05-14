@@ -13,7 +13,6 @@
             "-fopenmp"
         ],
         "include_dirs": [
-            ".",
             "cpp/include/"
         ],
         "language": "c++",
