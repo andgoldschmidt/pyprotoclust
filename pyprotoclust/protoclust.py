@@ -1,4 +1,4 @@
-import c_protoclust
+import pyprotoclust.c_protoclust
 from tqdm import tqdm_notebook, tqdm
 
 
@@ -17,7 +17,7 @@ def progress(iterable, verbose, notebook):
 
 def protoclust(distance_matrix, verbose=False, notebook=False):
     n = len(distance_matrix)
-    p = c_protoclust.PyProtoclust(n)
+    p = pyprotoclust.c_protoclust.PyProtoclust(n)
     p.initialize_distances(distance_matrix)
     for i in progress(range(n-1), verbose, notebook):
         p.compute_at(i)

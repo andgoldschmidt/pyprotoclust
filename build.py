@@ -29,13 +29,4 @@ def build(setup_kwargs):
     })
 
 
-# extensions = cythonize(extensions, compiler_directives={'language_level': "3"})
-#
-# setup(
-#     name='pyprotoclust',
-#     ext_modules=extensions,
-# )
-
-
-
 
