@@ -1,12 +1,8 @@
 # distutils: language = c++
 
-from numpy import array, dtype
-from itertools import combinations
 from pyprotoclust cimport Protoclust
 
-# Create a Cython extension type which holds a C++ instance
-# as an attribute and create a bunch of forwarding methods
-# Python extension type.
+# Create a Cython extension type which holds a C++ instance as an attribute and create a bunch of forwarding methods
 cdef class PyProtoclust:
     cdef Protoclust c_protoclust  # Hold a C++ instance which we're wrapping
 
@@ -33,7 +29,7 @@ cdef class PyProtoclust:
                 for i in range(n-1)]
 
     def center(self, int i):
-        return self.c_protoclust.get_cluster_center(i)        
+        return self.c_protoclust.get_cluster_center(i)
 
     def cluster_centers(self, int n):
         return [self.center(i) for i in range(2*n-1)]
