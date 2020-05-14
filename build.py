@@ -1,12 +1,21 @@
 from distutils.core import Extension
-from Cython.Build import cythonize
+
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    use_cython = False
+    src_ext = '.cpp'
+    # Attempt to fall back on
+else:
+    use_cython = True
+    src_ext = '.pyx'
 
 py_src = 'pyprotoclust/'
 cpp_src = 'pyprotoclust/cpp/src/'
 cpp_h = 'pyprotoclust/cpp/include/'
 
 # Link to py's pxd or py's cpp files. 
-sources = [py_src + 'c_protoclust.pyx',
+sources = [py_src + 'c_protoclust' + src_ext,
            cpp_src + 'protoclust.cpp',
            cpp_src + 'linkage.cpp',
            cpp_src + 'chain.cpp',

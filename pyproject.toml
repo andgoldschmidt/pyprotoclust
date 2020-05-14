@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyprotoclust"
 version = "0.1.0"
-description = ""
+description = "Hierarchical clustering using minimax linkage."
 authors = ["andy <andygold@uw.edu>"]
 repository = "https://github.com/andgoldschmidt/pyprotoclust"
 license = "MIT"
@@ -11,7 +11,9 @@ build = 'build.py'
 [tool.poetry.dependencies]
 python = "^3.7"
 tqdm = "^4.46.0"
-cython = "^0.29.17"
+
+# Optional if using supplied cpps
+cython = {version = "^0.29.17", optional = true}
 
 # Docs and examples
 sphinx = {version = "^3.0.3", optional = true}

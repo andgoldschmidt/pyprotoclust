@@ -99,7 +99,7 @@ version = "0.4.3"
 category = "main"
 description = "The Cython compiler for writing C extensions for the Python language."
 name = "cython"
-optional = false
+optional = true
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "0.29.17"
 
@@ -864,7 +864,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "8f48c485bd99124701435a05c209a7d730bac8ee7b378de1d65a44942ff3ab8b"
+content-hash = "5c5ea4b470cdf4c49e8a05d79dcc21738a81d9787461334ac390426253deabca"
 python-versions = "^3.7"
 
 [metadata.files]
