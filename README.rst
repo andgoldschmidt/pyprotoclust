@@ -28,6 +28,8 @@ Usage:
 
     from pyprotoclust import protoclust
     import numpy as np
+    import scipy as sp
+    import scipy.cluster.hierarchy
 
     # Generate two-dimensional toy data
     n = 60
