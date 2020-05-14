@@ -12,9 +12,10 @@ The original algorithm is from
 `Hierarchical Clustering With Prototypes via Minimax Linkage <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4527350/>`_
 by Jacob Bien and Robert Tibshirani.
 
-Pyprotoclust returns a linkage matrix encoding the hierachical clustering as well as an additional list labelling the
-prototypes associated with each clustering. This allows a user to integrate with the existing tools in the `SciPy
-hierarchical clustering module <https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html>`_.
+Pyprotoclust takes a distance matrix as input. It returns a linkage matrix encoding the hierachical clustering as well
+as an additional list labelling the prototypes associated with each clustering. This allows a user to integrate with
+the existing tools in the
+`SciPy hierarchical clustering module <https://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html>`_.
 
 Installation:
 
@@ -30,6 +31,7 @@ Usage:
     import numpy as np
     import scipy as sp
     import scipy.cluster.hierarchy
+    import scipy.spatial.distance
 
     # Generate two-dimensional toy data
     n = 60
@@ -38,9 +40,10 @@ Usage:
               {'mean': [1, -1], 'cov': [[5, 0], [0, 1]]},
               {'mean': [3, 7], 'cov': [[1, 0], [0, 1]]}]
     data = np.vstack([np.random.multivariate_normal(p['mean'], p['cov'], n) for p in params])
+    X = sp.spatial.distance.squareform(sp.spatial.distance.pdist(data))
 
     # Produce a hierarchical clustering using minimax linkage
-    Z, prototypes = protoclust(data)
+    Z, prototypes = protoclust(X)
 
     # Generate clusters at a set cut_height using scipy's hierarchy module
     cut_height = 7
