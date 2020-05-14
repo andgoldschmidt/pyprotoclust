@@ -1,6 +1,6 @@
 # distutils: language = c++
 
-from pyprotoclust cimport Protoclust
+from pyprotoclust.c_protoclust cimport Protoclust
 
 # Create a Cython extension type which holds a C++ instance as an attribute and create a bunch of forwarding methods
 cdef class PyProtoclust:

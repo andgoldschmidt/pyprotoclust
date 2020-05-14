@@ -13,7 +13,8 @@ cython = {version = "^0.29.17", optional = true}
 
 # Docs and examples
 sphinx = {version = "^3.0.3", optional = true}
-
+sklearn = "^0.0"
+scipy = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
