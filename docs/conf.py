@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'protoclust'
+project = 'pyprotoclust'
 copyright = '2020, Andy Goldschmidt'
 author = 'Andy Goldschmidt'
 

@@ -1,11 +1,12 @@
-Protoclust
-==========
-Prototype clustering in Python.
+pyprotoclust
+============
+Performs prototype clustering in Python using minimax linkage hierarchical clustering.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+    license
 
 
 Indices and tables
