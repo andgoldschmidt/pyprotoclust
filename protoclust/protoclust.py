@@ -1,19 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 07 11:08 2019
-
-@author: agoldschmidt
-"""
-
 import pyprotoclust as pyp
-try:
-    from tqdm import tqdm_notebook, tqdm
-except:
-    None
+from tqdm import tqdm_notebook, tqdm
 
-# -------------------------------------------------------------------
-# --- Utilites ----------------------------------------------------
-# -------------------------------------------------------------------
 
 def progress(iterable, verbose, notebook):
     if verbose:
@@ -27,10 +14,6 @@ def progress(iterable, verbose, notebook):
     else:
         return iterable
 
-
-# -------------------------------------------------------------------
-# --- Main algorithm ------------------------------------------------
-# -------------------------------------------------------------------
 
 def protoclust(distance_matrix, verbose=False, notebook=False):
     n = len(distance_matrix)
