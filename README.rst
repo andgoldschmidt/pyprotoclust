@@ -52,11 +52,17 @@ Usage:
 The previous example produces a linkage matrix Z and prototypes P that can be used to produce dendrograms and other
 plots of the data.
 
-.. image:: docs/images/dendrogram.png
-   :width: 400
-   :alt: A dendrogram of the hierarchical clustering example in the text.
+.. figure:: docs/images/dendrogram.png
+    :width: 400
+    :align: center
+    :alt: A dendrogram of the hierarchical clustering example.
 
-.. image:: docs/images/scatter.png
-   :width: 400
-   :alt: A scatter plot of the example data with circles drawn around the prototypes using the top-level linkage
-         heights as the radii.
+    A dendrogram of the hierarchical clustering example with a dashed line at the example cut height.
+
+.. figure:: docs/images/scatter.png
+    :width: 400
+    :align: center
+    :alt: A scatter plot of the  hierarchical clustering example.
+
+    A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level
+    linkage heights of each cluster.
