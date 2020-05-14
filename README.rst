@@ -57,12 +57,12 @@ plots of the data.
     :align: center
     :alt: A dendrogram of the hierarchical clustering example.
 
-    A dendrogram of the hierarchical clustering example with a dashed line at the example cut height.
+    *A dendrogram of the hierarchical clustering example with a dashed line at the example cut height.*
 
 .. figure:: docs/images/scatter.png
     :width: 400
     :align: center
     :alt: A scatter plot of the  hierarchical clustering example.
 
-    A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level
-    linkage heights of each cluster.
+    *A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level
+    linkage heights of each cluster.*
