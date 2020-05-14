@@ -3,7 +3,7 @@
 from pyprotoclust.c_protoclust cimport Protoclust
 
 # Create a Cython extension type which holds a C++ instance as an attribute and create a bunch of forwarding methods
-cdef class PyProtoclust:
+cdef class CyProtoclust:
     cdef Protoclust c_protoclust  # Hold a C++ instance which we're wrapping
 
     def __cinit__(self, int n):
