@@ -85,6 +85,9 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
+# auditwheel files
+wheelhouse/
+
 # Environments
 .env
 .venv
