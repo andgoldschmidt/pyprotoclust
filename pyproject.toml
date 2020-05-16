@@ -2,8 +2,10 @@
 name = "pyprotoclust"
 version = "0.1.0"
 description = "Hierarchical clustering using minimax linkage."
-authors = ["andy <andygold@uw.edu>"]
+authors = ["Andy Goldschmidt <andygold@uw.edu>"]
 repository = "https://github.com/andgoldschmidt/pyprotoclust"
+documentation = "https://pyprotoclust.readthedocs.io/"
+keywords = ["hierarchical", "clustering", "minimax", "prototypes"]
 license = "MIT"
 readme = 'README.rst'
 build = 'build.py'
