@@ -1,13 +1,20 @@
 from distutils.core import Extension
 
+# Change the default compiler, e.g. from clang for MAC OS.
+# import os
+# COMPILE_WITH =  "g++-9"
+# os.environ["CC"] = COMPILE_WITH 
+# os.environ["CXX"] = COMPILE_WITH
+
+
 try:
     from Cython.Build import cythonize
 except ImportError:
-    use_cython = False
+    USE_CYTHON = False
     src_ext = '.cpp'
     # Attempt to fall back on
 else:
-    use_cython = True
+    USE_CYTHON = True
     src_ext = '.pyx'
 
 py_src = 'pyprotoclust/'
@@ -23,6 +30,7 @@ sources = [py_src + 'c_protoclust' + src_ext,
 
 # In either case, source original (non-python) h/cpp to compile correctly.
 e3 = Extension(name='pyprotoclust.c_protoclust',
+               language = "c++",
                sources=sources,
                include_dirs=[cpp_h],
                extra_compile_args=['-fopenmp'],
@@ -31,10 +39,13 @@ e3 = Extension(name='pyprotoclust.c_protoclust',
 
 extensions = [e3]
 
+if USE_CYTHON:
+  extensions = cythonize(extensions, language_level=3)
+
 
 def build(setup_kwargs):
     setup_kwargs.update({
-        'ext_modules': cythonize(extensions, language_level=3)
+        'ext_modules': extensions
     })
 
 
