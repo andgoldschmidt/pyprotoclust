@@ -9,6 +9,7 @@ pyprotoclust
 
     notebooks/Example.ipynb
     modules
+    installation
     license
 
 The original algorithm is from
