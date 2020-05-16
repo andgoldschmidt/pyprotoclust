@@ -294,7 +294,7 @@ description = "Lightweight pipelining: using Python functions as pipeline jobs."
 name = "joblib"
 optional = true
 python-versions = ">=3.6"
-version = "0.15.0"
+version = "0.15.1"
 
 [[package]]
 category = "main"
@@ -1142,8 +1142,8 @@ jinja2 = [
     {file = "Jinja2-2.11.2.tar.gz", hash = "sha256:89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0"},
 ]
 joblib = [
-    {file = "joblib-0.15.0-py3-none-any.whl", hash = "sha256:a55f5268c5e402e4a892202089ebda1730db81e82f704d2bee8a6bc499ebc264"},
-    {file = "joblib-0.15.0.tar.gz", hash = "sha256:f8f84dcef519233be4ede1c64fd1f2d48b1e8bbb632d1013ebca75f8b678ee72"},
+    {file = "joblib-0.15.1-py3-none-any.whl", hash = "sha256:6825784ffda353cc8a1be573118085789e5b5d29401856b35b756645ab5aecb5"},
+    {file = "joblib-0.15.1.tar.gz", hash = "sha256:61e49189c84b3c5d99a969d314853f4d1d263316cc694bec17548ebaa9c47b6e"},
 ]
 jsonschema = [
     {file = "jsonschema-3.2.0-py2.py3-none-any.whl", hash = "sha256:4e5b3cf8216f577bee9ce139cbe72eca3ea4f292ec60928ff24758ce626cd163"},
