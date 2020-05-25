@@ -26,13 +26,15 @@ jupyter_client = {version = "^6.1.3", optional = true}
 ipykernel = {version = "^5.2.1", optional = true}
 matplotlib = {version = "^3.2.1", optional = true}
 ipywidgets = {version = "^7.5.1", optional = true}
+sphinx_rtd_theme = {version = "^0.4.3", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
 [tool.poetry.extras]
 cython = ["cython"]
-docs = ["sphinx", "sklearn", "scipy", "nbsphinx", "jupyter_client", "ipykernel", "matplotlib", "ipywidgets"]
+docs = ["sphinx", "sklearn", "scipy", "nbsphinx", "jupyter_client", "ipykernel", "matplotlib", "ipywidgets",
+		"sphinx_rtd_theme"]
 
 [build-system]
 requires = ["poetry>=0.12"]
