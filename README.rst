@@ -5,6 +5,9 @@
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
    :target: https://lbesson.mit-license.org/
    :alt: MIT License
+   
+.. image:: https://zenodo.org/badge/185280797.svg
+   :target: https://zenodo.org/badge/latestdoi/185280797
 
 **Pyprotoclust** is an implementatin of representative hierarchical clustering using minimax linkage.
 
