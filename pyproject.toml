@@ -37,5 +37,5 @@ docs = ["sphinx", "sklearn", "scipy", "nbsphinx", "jupyter_client", "ipykernel",
 		"sphinx_rtd_theme"]
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry_core>=1.0.0", "setuptools", "cython"]
+build-backend = "poetry.core.masonry.api"

@@ -1,15 +1,24 @@
 from distutils.core import Extension
 
-# Change the default compiler, e.g. from clang for MAC OS.
-# import os
-# COMPILE_WITH =  "g++-9"
-# os.environ["CC"] = COMPILE_WITH 
-# os.environ["CXX"] = COMPILE_WITH
 
+# MAC OS 
+# ======
+# # Change the default compiler, e.g. from clang for MAC OS.
+# # import os
+# # COMPILE_WITH =  'g++-9'
+# os.environ['CC'] = COMPILE_WITH 
+# os.environ['CXX'] = COMPILE_WITH
 
+# # @rpath must be specified to dynamically link to the correct library
+# # See also: extra_link_args in Extension
+# OSX_LINK_ARGS = '-Wl,-rpath,/usr/local/opt/gcc@9/lib/gcc/9/'
+# ======
+
+# TODO: It would be nice to automatically check for OPENMP support
 try:
     from Cython.Build import cythonize
 except ImportError:
+    print('Build.py was unable to import cython.')
     USE_CYTHON = False
     src_ext = '.cpp'
     # Attempt to fall back on
@@ -30,11 +39,11 @@ sources = [py_src + 'c_protoclust' + src_ext,
 
 # In either case, source original (non-python) h/cpp to compile correctly.
 e3 = Extension(name='pyprotoclust.c_protoclust',
-               language = "c++",
+               language = 'c++',
                sources=sources,
                include_dirs=[cpp_h],
                extra_compile_args=['-fopenmp'],
-               extra_link_args=['-fopenmp']
+               extra_link_args=['-fopenmp'] #, OSX_LINK_ARGS]
                )
 
 extensions = [e3]
@@ -45,7 +54,7 @@ if USE_CYTHON:
 
 def build(setup_kwargs):
     setup_kwargs.update({
-        'ext_modules': extensions
+        'ext_modules': extensions,
     })
 
 

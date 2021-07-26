@@ -19,8 +19,6 @@ If you are building with cython, use
 
 	poetry install -E cython
 
-For Mac OS users, make sure to rebuild with cython.
-
 If you are building the Sphinx documentation or want to be sure all packages are installed to run the notebooks,
 
 .. code-block:: bash
@@ -56,10 +54,17 @@ is an example of a desired compiler. Now set some environment variables for this
 
 .. code-block:: python
 
+	# MAC OS 
+	# ======
 	# Change the default compiler, e.g. from clang for MAC OS.
-    import os
-    COMPILE_WITH =  "g++-9"
-    os.environ["CC"] = COMPILE_WITH 
-    os.environ["CXX"] = COMPILE_WITH
+	# import os
+	# COMPILE_WITH =  'g++-9'
+	os.environ['CC'] = COMPILE_WITH 
+	os.environ['CXX'] = COMPILE_WITH
+
+	# @rpath must be specified to dynamically link to the correct library
+	# See also: extra_link_args in Extension
+	OSX_LINK_ARGS = '-Wl,-rpath,/usr/local/opt/gcc@9/lib/gcc/9/'
+	# ======
 	
-where *COMPILE_WITH* is replaced with the compiler you just installed.
+where *COMPILE_WITH* and *OSX_LINK_ARGS* reflect the compiler version number you just installed.
