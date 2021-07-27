@@ -54,7 +54,7 @@ Usage:
     L,M = sp.cluster.hierarchy.leaders(Z, T)
 
     # Get the prototypes associated with the generated clusters
-    P = data[prototypes[L]]
+    P = data[[prototypes[l] for l in L]]
 
 
 The previous example produces a linkage matrix Z and prototypes P that can be used to produce dendrograms and other
