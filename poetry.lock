@@ -555,8 +555,8 @@ category = "main"
 description = "Jupyter Notebook Tools for Sphinx"
 name = "nbsphinx"
 optional = true
-python-versions = ">=3"
-version = "0.7.1"
+python-versions = ">=3.6"
+version = "0.8.6"
 
 [package.dependencies]
 docutils = "*"
@@ -731,6 +731,7 @@ version = "1.10.0"
 [[package]]
 category = "main"
 description = "C parser in Python"
+marker = "implementation_name == \"pypy\""
 name = "pycparser"
 optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -1182,7 +1183,7 @@ cython = ["cython"]
 docs = ["sphinx", "sklearn", "scipy", "nbsphinx", "jupyter_client", "ipykernel", "matplotlib", "ipywidgets", "sphinx_rtd_theme"]
 
 [metadata]
-content-hash = "bacb538e1c210bbb324569f634e1d3e715634845a674982c806225e7a563076b"
+content-hash = "747ad48f0ee39f0f796a8baa6f37c94e0ad703244934ab3bd345c6f205b85748"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1538,8 +1539,8 @@ nbformat = [
     {file = "nbformat-5.1.3.tar.gz", hash = "sha256:b516788ad70771c6250977c1374fcca6edebe6126fd2adb5a69aa5c2356fd1c8"},
 ]
 nbsphinx = [
-    {file = "nbsphinx-0.7.1-py3-none-any.whl", hash = "sha256:560b23ff8468643b49e19293c154c93c6ee7090786922731e1c391bd566aac86"},
-    {file = "nbsphinx-0.7.1.tar.gz", hash = "sha256:f50bd750e4ee3a4e4c3cf571155eab413dc87d581c1380021e7623205b5fa648"},
+    {file = "nbsphinx-0.8.6-py3-none-any.whl", hash = "sha256:133149fd01cbf3c89a2f1a3ca0edfaaddaf55bafbf69b086017df602161b26c8"},
+    {file = "nbsphinx-0.8.6.tar.gz", hash = "sha256:097dee333558f400e9abbb53ce7d4fa64a257cfa89dd20f7554dca7f0cd5e143"},
 ]
 nest-asyncio = [
     {file = "nest_asyncio-1.5.1-py3-none-any.whl", hash = "sha256:76d6e972265063fe92a90b9cc4fb82616e07d586b346ed9d2c89a4187acea39c"},
