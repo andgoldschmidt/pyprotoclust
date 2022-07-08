@@ -74,3 +74,42 @@ plots of the data.
 
     *A scatter plot of the example with circles centered at prototypes drawn with radii equal to the top-level
     linkage heights of each cluster.*
+    
+    
+Citing pyprotoclust
+-------------------
+The **pyprotoclust** package is a contribution to work that has been published in Nature Scientific Data. The original algorithm was published in the Journal of the American Statistical Association. If you use **pyprotoclust** in your work, please cite the following references:
+
+Goldschmidt, Andy, et al. "Quantifying yeast colony morphologies with feature engineering from time-lapse photography." Scientific Data 9.1 (2022): 1-9. https://doi.org/10.1038/s41597-022-01340-3
+
+.. code-block:: text
+
+   @article{goldschmidt2022quantifying,
+     doi={https://doi.org/10.1038/s41597-022-01340-3},
+     title={Quantifying yeast colony morphologies with feature engineering from time-lapse photography},
+     author={Goldschmidt, Andy and Kunert-Graf, James and Scott, Adrian C and Tan, Zhihao and Dudley, Aim{\'e}e M and Kutz, J Nathan},
+     journal={Scientific Data},
+     volume={9},
+     number={1},
+     pages={1--9},
+     year={2022},
+     publisher={Nature Publishing Group}
+   }
+
+
+Bien, Jacob, and Robert Tibshirani. "Hierarchical clustering with prototypes via minimax linkage." Journal of the American Statistical Association 106.495 (2011): 1075-1084. https://doi.org/10.1198/jasa.2011.tm10183
+
+.. code-block:: text
+
+   @article{bien2011hierarchical,
+     doi={https://doi.org/10.1198/jasa.2011.tm10183},
+     title={Hierarchical {Clustering} with {Prototypes} via {Minimax} {Linkage}},
+     author={Bien, Jacob and Tibshirani, Robert},
+     journal={Journal of the American Statistical Association},
+     volume={106},
+     number={495},
+     pages={1075--1084},
+     year={2011},
+     publisher={Taylor \& Francis}
+   }
+
